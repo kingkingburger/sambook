@@ -128,9 +128,8 @@ Both can share a normalized key:
 
 The normalized key should sort the three words by a stable Korean collation strategy before joining them.
 
-## Early Implementation Shortcut
+## Agent Usage Note
 
-For the first version, the app can keep word data in local TypeScript files and mock story data in memory.
+Use this model as product and persistence guidance. Do not assume Sambook needs app code unless the user explicitly requests implementation.
 
-The database schema above should still guide component names, route names, and API boundaries.
-
+When implementation is requested, preserve the product rules first: stories keep the exact three words, same-word-set lookup is stable, and private stories remain hidden from public browsing.

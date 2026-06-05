@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sambook"
+  short_description: "Shape Korean three-word story play."
+  default_prompt: "Help me evolve Sambook as a Korean three-word story-writing product."
