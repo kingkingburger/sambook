@@ -11,3 +11,8 @@ result/
 # OS files
 .DS_Store
 Thumbs.db
+
+
+# Added by cargo
+
+/target
