@@ -2,8 +2,8 @@ use std::error::Error;
 
 use crate::load_json::load_json;
 
-pub fn extract_json_to_one_word() -> Result<Vec<String>, Box<dyn Error + 'static>> {
-    let raw_json = load_json(String::from("raw_data/1_5000_20260719.json"))?;
+pub fn extract_json_to_one_word(path: String) -> Result<Vec<String>, Box<dyn Error + 'static>> {
+    let raw_json = load_json(path)?;
     let raw_hangle_array = raw_json
         .get("LexicalResource")
         .and_then(|x| x.get("Lexicon"))
