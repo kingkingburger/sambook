@@ -1,12 +1,12 @@
-use std::{error::Error, println};
+use std::error::Error;
 
-use crate::load_json::load_json;
+use crate::extract_json_to_one_word::extract_json_to_one_word;
 
+mod extract_json_to_one_word;
 mod load_json;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let raw_json = load_json(String::from("raw_data/1_5000_20260719.json"))?;
-    println!("{}", serde_json::to_string_pretty(&raw_json)?);
-    
+    extract_json_to_one_word()?;
+
     Ok(())
 }
