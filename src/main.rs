@@ -9,9 +9,10 @@ mod refine_word;
 fn main() -> Result<(), Box<dyn Error>> {
     let s = std::fs::read_to_string("data/words.json")?;
     let value: Value = serde_json::from_str(&s)?;
-    let manf = value.get("words");
+    let manf = value.get("words").unwrap();
+    let words = serde_json::to_string_pretty(manf)?;
 
-    println!("{}", serde_json::to_string_pretty(&manf)?.len());
+    println!("{}", words.len());
 
     Ok(())
 }
