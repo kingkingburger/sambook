@@ -1,13 +1,17 @@
-use std::error::Error;
+use std::{error::Error, println};
 
-use crate::refine_word::refine_word;
+use serde_json::Value;
 
 mod extract_json_to_one_word;
 mod load_json;
 mod refine_word;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    refine_word()?;
+    let s = std::fs::read_to_string("data/words.json")?;
+    let value: Value = serde_json::from_str(&s)?;
+    let manf = value.get("words");
+
+    println!("{}", serde_json::to_string_pretty(&manf)?.len());
 
     Ok(())
 }
