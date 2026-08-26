@@ -6,7 +6,8 @@ mod extract_json_to_one_word;
 mod load_json;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    extract_json_to_one_word()?;
+    let word_array = extract_json_to_one_word()?;
 
+    println!("{}", serde_json::to_string_pretty(&word_array)?);
     Ok(())
 }
