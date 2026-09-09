@@ -9,11 +9,17 @@ mod send_discord_alert;
 async fn main() -> Result<(), Box<dyn Error>> {
     let _ = dotenvy::dotenv();
 
+    // 3단어를 , 로 묶어서 1번에 보내기
     let picked = get_3_word()?;
-    for word in picked {
-        send_discord_alert(word.to_string()).await?;
-        println!("{}", word);
-    }
+
+    let words = picked
+        .iter()
+        .map(|v| v.as_str().unwrap())
+        .collect::<Vec<&str>>()
+        .join(",");
+
+    println!("{}", words);
+    send_discord_alert(words).await?;
 
     Ok(())
 }
