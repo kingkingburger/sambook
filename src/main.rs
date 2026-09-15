@@ -13,17 +13,23 @@ mod send_discord_alert;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let _ = dotenvy::dotenv();
+    std::env::var("DISCORD_WEBHOOK_URL")?;
+
     let mut interval = time::interval(Duration::from_hours(1));
+    interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
         interval.tick().await;
 
-        let _ = dotenvy::dotenv();
-        let start = Instant::now();
         // 3단어를 , 로 묶어서 1번에 보내기
-        let picked = get_3_word()?;
-        let elapsed = start.elapsed();
-        println!("실행시간: {:?}", elapsed);
+        let picked = match get_3_word() {
+            Ok(p) => p,
+            Err(e) => {
+                eprintln!("단어 뽑기 실패: {e}");
+                continue;
+            }
+        };
 
         let words = picked
             .iter()
@@ -33,10 +39,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         println!("{}", words);
 
-        let send_start = Instant::now();
-        send_discord_alert(words).await?;
-        let send_elapsed = send_start.elapsed();
-        println!("실행시간: {:?}", send_elapsed);
+        if let Err(e) = send_discord_alert(words).await {
+            eprintln!("디스코드 전송 실패: {e}")
+        }
     }
-    // Ok(())
 }
