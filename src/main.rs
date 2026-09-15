@@ -12,8 +12,9 @@ mod send_discord_alert;
 async fn main() -> Result<(), Box<dyn Error>> {
     let _ = dotenvy::dotenv();
     std::env::var("DISCORD_WEBHOOK_URL")?;
+    let internal_time = std::env::var("INTERNAL_TIME")?.parse::<u64>().unwrap();
 
-    let mut interval = time::interval(Duration::from_hours(1));
+    let mut interval = time::interval(Duration::from_secs(internal_time));
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
     loop {
