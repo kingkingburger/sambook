@@ -1,9 +1,6 @@
-use std::{
-    error::Error,
-    println,
-    time::{Duration, Instant},
-};
+use std::{error::Error, println, time::Duration};
 
+use chrono::Local;
 use tokio::time;
 
 use crate::{get_3_word::get_3_word, send_discord_alert::send_discord_alert};
@@ -37,7 +34,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
             .collect::<Vec<&str>>()
             .join(",");
 
-        println!("{}", words);
+        let now = Local::now().format("%Y-%m-%d %H:%M:%S");
+        println!("[{now}] {words}");
 
         if let Err(e) = send_discord_alert(words).await {
             eprintln!("디스코드 전송 실패: {e}")
