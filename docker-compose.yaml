@@ -1,0 +1,16 @@
+services:
+  sambook:
+    build: .
+    container_name: sambook
+    restart: unless-stopped
+    env_file:
+     - .env
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - ./data:/app/data:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
