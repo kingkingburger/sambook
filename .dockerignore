@@ -1,0 +1,6 @@
+.git
+.gitignore
+.env
+target
+raw_data
+archive
