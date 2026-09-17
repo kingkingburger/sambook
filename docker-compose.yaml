@@ -9,6 +9,8 @@ services:
       TZ: Asia/Seoul
     volumes:
       - ./data:/app/data:ro
+    ports:
+      - 3050:3050
     logging:
       driver: json-file
       options:
