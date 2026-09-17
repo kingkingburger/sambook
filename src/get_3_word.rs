@@ -1,6 +1,8 @@
 use std::error::Error;
 
+use axum::Json;
 use rand::seq::IndexedRandom;
+use serde::Serialize;
 use serde_json::Value;
 
 pub fn get_3_word() -> Result<Vec<Value>, Box<dyn Error>> {
@@ -19,4 +21,29 @@ pub fn get_3_word() -> Result<Vec<Value>, Box<dyn Error>> {
         .collect::<Vec<Value>>();
 
     Ok(picked)
+}
+
+// response type
+#[derive(Serialize)]
+pub struct Words {
+    word: String,
+}
+
+// router이자 service 합쳐놓은 것.
+pub async fn get_3_word_to_json() -> Json<Words> {
+    let picked = match get_3_word() {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("{e}");
+            vec![]
+        }
+    };
+
+    let words = picked
+        .iter()
+        .map(|v| v.as_str().unwrap())
+        .collect::<Vec<&str>>()
+        .join(",");
+
+    Json(Words { word: words })
 }
