@@ -32,17 +32,13 @@ pub struct Words {
 
 // router이자 service 합쳐놓은 것.
 pub async fn get_3_word_to_json() -> Result<Json<Words>, (StatusCode, String)> {
-    let picked = match get_3_word() {
-        Ok(p) => p,
-        Err(e) => {
-            eprintln!("[Error] 단어 가져오기 실패: {e}");
-
-            return Err((
-                StatusCode::INTERNAL_SERVER_ERROR,
-                "Internal Server Error".to_string(),
-            ));
-        }
-    };
+    let picked = get_3_word().map_err(|e| {
+        eprintln!("[Error] 단어 가져오기 실패: {e}");
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Internal Server Error".to_string(),
+        )
+    })?;
 
     let words = picked
         .iter()
