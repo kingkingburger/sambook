@@ -20,13 +20,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let port = std::env::var("PORT")?.parse::<u64>().unwrap();
     let internal_time = std::env::var("INTERNAL_TIME")?.parse::<u64>().unwrap();
 
+    // ===== api 서버 띄우기 =====
     let app = Router::new().route("/word", get(get_3_word_to_json));
-
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
-    println!("Server running on http://localhost:{port}");
-
-    // api 서버
     let server = tokio::spawn(async move {
+        println!("Server running on http://localhost:{port}");
         if let Err(e) = axum::serve(listener, app).await {
             eprintln!("Api 서버 오류: {e}");
         }

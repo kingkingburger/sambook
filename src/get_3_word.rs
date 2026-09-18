@@ -2,6 +2,7 @@ use std::error::Error;
 
 use axum::Json;
 use rand::seq::IndexedRandom;
+use reqwest::StatusCode;
 use serde::Serialize;
 use serde_json::Value;
 
@@ -30,14 +31,14 @@ pub struct Words {
 }
 
 // router이자 service 합쳐놓은 것.
-pub async fn get_3_word_to_json() -> Json<Words> {
-    let picked = match get_3_word() {
-        Ok(p) => p,
-        Err(e) => {
-            eprintln!("{e}");
-            vec![]
-        }
-    };
+pub async fn get_3_word_to_json() -> Result<Json<Words>, (StatusCode, String)> {
+    let picked = get_3_word().map_err(|e| {
+        eprintln!("문자 가져오기 실패: {e}");
+        (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Internal server error occurred".to_string(),
+        )
+    })?;
 
     let words = picked
         .iter()
@@ -45,5 +46,5 @@ pub async fn get_3_word_to_json() -> Json<Words> {
         .collect::<Vec<&str>>()
         .join(",");
 
-    Json(Words { word: words })
+    Ok(Json(Words { word: words }))
 }
