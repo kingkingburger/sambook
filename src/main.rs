@@ -3,10 +3,11 @@ use std::{error::Error, println};
 use axum::{Router, routing::get};
 
 use crate::{
-    get_3_word::get_3_word_to_json,
+    env_config::get_env, get_3_word::get_3_word_to_json,
     get_3_word_then_send_discord::get_3_word_then_send_discord_in_loop,
 };
 
+mod env_config;
 mod get_3_word;
 mod get_3_word_then_send_discord;
 mod send_discord_alert;
@@ -18,6 +19,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     std::env::var("DISCORD_WEBHOOK_URL")?;
     std::env::var("INTERNAL_TIME")?.parse::<u64>().unwrap();
     let port = std::env::var("PORT")?.parse::<u64>().unwrap();
+
+    // get_env();
 
     // ===== api 서버 띄우기 =====
     let app = Router::new().route("/word", get(get_3_word_to_json));
