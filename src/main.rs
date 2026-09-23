@@ -3,7 +3,8 @@ use std::{error::Error, println};
 use axum::{Router, routing::get};
 
 use crate::{
-    env_config::get_env, get_3_word::get_3_word_to_json,
+    env_config::{EnvObject, get_env},
+    get_3_word::get_3_word_to_json,
     get_3_word_then_send_discord::get_3_word_then_send_discord_in_loop,
 };
 
@@ -15,12 +16,8 @@ mod send_discord_alert;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // ===== 환경변수 가져오기 =====
-    let _ = dotenvy::dotenv();
-    std::env::var("DISCORD_WEBHOOK_URL")?;
-    std::env::var("INTERNAL_TIME")?.parse::<u64>().unwrap();
-    let port = std::env::var("PORT")?.parse::<u64>().unwrap();
 
-    // get_env();
+    let EnvObject { port, .. } = get_env()?;
 
     // ===== api 서버 띄우기 =====
     let app = Router::new().route("/word", get(get_3_word_to_json));
