@@ -3,10 +3,14 @@ use std::{error::Error, println, time::Duration};
 use chrono::Local;
 use tokio::time;
 
-use crate::{get_3_word::get_3_word, send_discord_alert::send_discord_alert};
+use crate::{
+    env_config::{EnvObject, get_env},
+    get_3_word::get_3_word,
+    send_discord_alert::send_discord_alert,
+};
 
 pub async fn get_3_word_then_send_discord_in_loop() -> Result<(), Box<dyn Error>> {
-    let internal_time = std::env::var("INTERNAL_TIME")?.parse::<u64>().unwrap();
+    let EnvObject { internal_time, .. } = get_env()?;
     let mut interval = time::interval(Duration::from_secs(internal_time));
     interval.set_missed_tick_behavior(time::MissedTickBehavior::Skip);
 
