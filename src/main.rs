@@ -16,7 +16,6 @@ mod send_discord_alert;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // ===== 환경변수 가져오기 =====
-
     let EnvObject { port, .. } = get_env()?;
 
     // ===== api 서버 띄우기 =====

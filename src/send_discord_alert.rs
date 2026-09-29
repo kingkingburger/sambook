@@ -10,6 +10,7 @@ pub async fn send_discord_alert(message: String) -> Result<(), Box<dyn Error>> {
         discord_webhook_url,
         ..
     } = get_env()?;
+    
     let client = Client::new();
 
     let payload = json!({
