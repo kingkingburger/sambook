@@ -35,7 +35,7 @@ pub async fn get_3_word_then_send_discord_in_loop() -> Result<(), Box<dyn Error>
             .join(",");
 
         if let Err(e) = send_discord_alert(words).await {
-            eprintln!("디스코드 전송 실패: {e}")
+            eprintln!("[send_discord_alert] 디스코드 전송 실패: {e}")
         }
     }
 
