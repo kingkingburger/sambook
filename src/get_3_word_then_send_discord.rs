@@ -27,14 +27,12 @@ pub async fn get_3_word_then_send_discord_in_loop() -> Result<(), Box<dyn Error>
             }
         };
 
+        // 3단어를 하나의 String으로 나타내기 위함
         let words = picked
             .iter()
-            .map(|v| v.as_str().unwrap())
-            .collect::<Vec<&str>>()
+            .filter_map(|v| v.as_str())
+            .collect::<Vec<_>>() // 컴파일러 자동 추론
             .join(",");
-
-        let now = Local::now().format("%Y-%m-%d %H:%M:%S");
-        println!("[{now}] {words}");
 
         if let Err(e) = send_discord_alert(words).await {
             eprintln!("디스코드 전송 실패: {e}")
